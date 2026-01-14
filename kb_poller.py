@@ -1,5 +1,4 @@
 from pynput import keyboard
-# pip install pynput
 
 class KBPoller:
     def on_press(self, key):
@@ -19,5 +18,11 @@ class KBPoller:
     def __init__(self):
         self.pressed = set()
 
-        listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release, suppress=True)
+        listener = keyboard.Listener(
+            on_press=self.on_press,
+            on_release=self.on_release,
+        )
         listener.start()
+
+    def get_keys(self):
+        return self.pressed
