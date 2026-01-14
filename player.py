@@ -14,4 +14,4 @@ class Player:
             self.y += 1
 
         self.x = max(bounds["x_min"], min(self.x, bounds["x_max"]))
-        self.y = max(bounds["y_min"], min(self.y, bounds["y_may"]))
+        self.y = max(bounds["y_min"], min(self.y, bounds["y_max"]))
