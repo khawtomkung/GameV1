@@ -1,4 +1,5 @@
 import time
+import pygame
 
 from kb_poller import KBPoller
 
@@ -9,6 +10,28 @@ class InputController:
 
     def get_pressed_keys(self):
         return self.kb_poller.pressed
+
+
+class PygameInputController:
+    def __init__(self):
+        pass
+
+    def get_pressed_keys(self):
+        keys = pygame.key.get_pressed()
+        pressed = set()
+
+        if keys[pygame.K_a]:
+            pressed.add("a")
+        if keys[pygame.K_d]:
+            pressed.add("d")
+        if keys[pygame.K_w]:
+            pressed.add("w")
+        if keys[pygame.K_s]:
+            pressed.add("s")
+        if keys[pygame.K_q]:
+            pressed.add("q")
+
+        return pressed
 
 
 class GameField:
@@ -96,23 +119,58 @@ class GameEngine:
 
 
 class GraphicsEngine:
-    def __init__(self):
-        pass
+    def __init__(self, width=600, height=600):
+        pygame.init()
+
+        self.width = width
+        self.height = height
+
+        self.screen = pygame.display.set_mode((width, height))
+        pygame.display.set_caption("Simple Game")
+
+        self.clock = pygame.time.Clock()
 
     def start_frame(self):
-        pass
+        self.screen.fill((0, 0, 0))  # black background
+
+        # handle window close
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
     def show_frame(self):
-        pass
+        pygame.display.flip()
 
     def render_circle(self, x, y, radius, color):
-        print(f"{color} circle is at:", x, y)
+        colors = {
+            "red": (255, 0, 0),
+            "blue": (0, 0, 255)
+        }
+
+        pygame.draw.circle(
+            self.screen,
+            colors.get(color, (225, 225, 225)),
+            (int(x), int(y)),
+            radius
+        )
 
 
 if __name__ == "__main__":
-    game_field = GameField(0, 0, 100, 100)
+    game_field = GameField(0, 0, 500, 500)
     player = Player(50, 50)
     npc = NPC(70, 70, 2, 1)
 
-    game_engine = GameEngine(GraphicsEngine(), InputController(KBPoller()), game_field, player, npc, fps=15)
+    graphics = GraphicsEngine(500, 500)
+    input_controller = PygameInputController()
+
+    game_engine = GameEngine(
+        graphics,
+        input_controller,
+        game_field,
+        player,
+        npc,
+        fps=165
+    )
+
     game_engine.run_game()
