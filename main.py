@@ -1,26 +1,29 @@
 # Real time game
 
 import time
-from pynput import keyboard
 
+from pygame_input_controller import PygameInputController
 from player import Player
 from npc import NPC
-from graphics import Graphics
-from kb_poller import KBPoller
+from game_field import GameField
+from graphics import GraphicsEngine
 from game_engine import GameEngine
 
-bounds = {
-    "x_min": 0,
-    "x_max": 60,
-    "y_min": 0,
-    "y_max": 60,
-}
+if __name__ == "__main__":
+    game_field = GameField(0, 0, 500, 500)
+    player = Player(50, 50)
+    npc = NPC(70, 70, 2, 1)
 
-player = Player(10, 10)
-npcs = [NPC(50, 50, 1, 2)]
+    graphics = GraphicsEngine(500, 500)
+    input_controller = PygameInputController()
 
-graphics = Graphics()
-input_kb = KBPoller()
+    game_engine = GameEngine(
+        graphics,
+        input_controller,
+        game_field,
+        player,
+        npc,
+        fps=165
+    )
 
-game = GameEngine(player, npcs, graphics, input_kb, bounds)
-game.run()
+    game_engine.run_game()

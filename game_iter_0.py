@@ -1,16 +1,6 @@
 import time
 import pygame
 
-from kb_poller import KBPoller
-
-
-class InputController:
-    def __init__(self, kb_poller: KBPoller):
-        self.kb_poller = kb_poller
-
-    def get_pressed_keys(self):
-        return self.kb_poller.pressed
-
 
 class PygameInputController:
     def __init__(self):

@@ -1,17 +1,12 @@
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, x, y, speed_x=1, speed_y=1):
         self.x = x
         self.y = y
+        self.speed_x = speed_x
+        self.speed_y = speed_y
 
-    def update(self, keys, bounds):
-        if "a" in keys:
-            self.x -= 1
-        if "d" in keys:
-            self.x += 1
-        if "w" in keys:
-            self.y -= 1
-        if "s" in keys:
-            self.y += 1
+    def move(self, left, right, up, down, game_field):
+        self.x += self.speed_x * right - self.speed_x * left
+        self.y += self.speed_y * down - self.speed_y * up
 
-        self.x = max(bounds["x_min"], min(self.x, bounds["x_max"]))
-        self.y = max(bounds["y_min"], min(self.y, bounds["y_max"]))
+        self.x, self.y, _, _ = game_field.clamp(self.x, self.y)
